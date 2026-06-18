@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
 import { useState } from "react";
 import Logo from "./Logo";
 
@@ -13,9 +14,70 @@ const navLinks = [
   { href: "/contact", label: "Contact" },
 ];
 
+function AuthButtons({ onNavigate }: { onNavigate?: () => void }) {
+  const { data: session } = useSession();
+
+  if (session?.user) {
+    return (
+      <>
+        <div className="flex items-center gap-2 rounded-full bg-white/20 px-3 py-1.5">
+          {session.user.image && (
+            // eslint-disable-next-line @next/next/no-img-element -- Google avatar URL
+            <img
+              src={session.user.image}
+              alt=""
+              className="h-8 w-8 rounded-full ring-2 ring-indigo-400/50"
+            />
+          )}
+          <span className="max-w-[120px] truncate text-sm font-medium text-slate-700">
+            {session.user.name}
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={() => {
+            onNavigate?.();
+            signOut({ callbackUrl: "/" });
+          }}
+          className="btn-secondary !px-4 !py-2 !text-sm"
+        >
+          Sign out
+        </button>
+        <Link
+          href="/upload"
+          onClick={onNavigate}
+          className="btn-primary !px-5 !py-2 !text-sm"
+        >
+          Start Free
+        </Link>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Link
+        href="/login"
+        onClick={onNavigate}
+        className="btn-secondary !px-4 !py-2 !text-sm"
+      >
+        Sign in
+      </Link>
+      <Link
+        href="/login"
+        onClick={onNavigate}
+        className="btn-primary !px-5 !py-2 !text-sm"
+      >
+        Start Free
+      </Link>
+    </>
+  );
+}
+
 export default function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const closeMenu = () => setOpen(false);
 
   return (
     <header className="glass-nav sticky top-0 z-50">
@@ -39,8 +101,7 @@ export default function Navbar() {
 
         {/* Desktop CTA */}
         <div className="hidden items-center gap-3 md:flex">
-          <Link href="/upload" className="btn-secondary !px-4 !py-2 !text-sm">Sign in</Link>
-          <Link href="/upload" className="btn-primary  !px-5 !py-2 !text-sm">Start Free</Link>
+          <AuthButtons />
         </div>
 
         {/* Mobile burger */}
@@ -75,7 +136,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                onClick={() => setOpen(false)}
+                onClick={closeMenu}
                 className={`rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
                   pathname === link.href
                     ? "bg-white/20 text-indigo-600"
@@ -85,9 +146,9 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <Link href="/upload" onClick={() => setOpen(false)} className="btn-primary mt-2 text-center">
-              Start Free
-            </Link>
+            <div className="mt-3 flex flex-col gap-2">
+              <AuthButtons onNavigate={closeMenu} />
+            </div>
           </div>
         </div>
       )}

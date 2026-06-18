@@ -3,6 +3,7 @@ import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import BackgroundBlobs from "@/components/layout/BackgroundBlobs";
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
+import AuthSessionProvider from "@/components/providers/SessionProvider";
 import "./globals.css";
 
 const inter = Inter({
@@ -43,10 +44,12 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${jakarta.variable} relative flex min-h-screen min-h-[100dvh] flex-col font-sans text-slate-700 antialiased`}
       >
-        <BackgroundBlobs />
-        <Navbar />
-        <main className="relative flex-1">{children}</main>
-        <Footer />
+        <AuthSessionProvider>
+          <BackgroundBlobs />
+          <Navbar />
+          <main className="relative flex-1">{children}</main>
+          <Footer />
+        </AuthSessionProvider>
       </body>
     </html>
   );
