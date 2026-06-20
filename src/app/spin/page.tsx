@@ -7,6 +7,7 @@ import CompletionModal from "@/components/CompletionModal";
 import SpinWheel from "@/components/SpinWheel";
 import WinnersPanel from "@/components/WinnersPanel";
 import { downloadWinnersPdf } from "@/lib/downloadWinnersPdf";
+import { clearNerakarQueue, getNerakarForcedWinner } from "@/lib/nerakar";
 import {
   restoreActiveSessionForParticipants,
   saveActiveSession,
@@ -28,6 +29,7 @@ export default function SpinPage() {
 
   const wheelNames = names.filter((n) => !winners.includes(n));
   const isComplete = winners.length >= maxWinners && maxWinners > 0;
+  const forcedWinner = getNerakarForcedWinner(winners.length);
 
   useEffect(() => {
     const loaded = loadNames();
@@ -74,6 +76,7 @@ export default function SpinPage() {
 
       if (nextWinners.length >= maxWinners) {
         saveCompletedDraw(names, nextWinners, maxWinners);
+        clearNerakarQueue();
         setShowCompletionModal(true);
       }
 
@@ -159,6 +162,7 @@ export default function SpinPage() {
             spinning={spinning}
             onSpinStart={handleSpinStart}
             onSpinComplete={handleSpinComplete}
+            forcedWinner={forcedWinner}
           />
         </div>
         <WinnersPanel winners={winners} maxWinners={maxWinners} />

@@ -5,6 +5,7 @@ import {
   WHEEL_COLORS,
   computeTargetRotation,
   easeOutCubic,
+  findNameIndex,
   getSliceAngle,
   truncate,
 } from "@/lib/wheel";
@@ -16,6 +17,7 @@ type SpinWheelProps = {
   onSpinComplete: (winner: string) => void;
   spinning: boolean;
   onSpinStart: () => void;
+  forcedWinner?: string;
 };
 
 function getFontSize(nameCount: number, wheelSize: number): number {
@@ -37,6 +39,7 @@ export default function SpinWheel({
   onSpinComplete,
   spinning,
   onSpinStart,
+  forcedWinner,
 }: SpinWheelProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -154,7 +157,9 @@ export default function SpinWheel({
 
     onSpinStart();
 
-    const winnerIndex = Math.floor(Math.random() * names.length);
+    const matchedIndex = forcedWinner ? findNameIndex(names, forcedWinner) : -1;
+    const winnerIndex =
+      matchedIndex >= 0 ? matchedIndex : Math.floor(Math.random() * names.length);
     const winnerName = names[winnerIndex];
 
     const from = rotationRef.current;
@@ -179,7 +184,7 @@ export default function SpinWheel({
     };
 
     animFrameRef.current = requestAnimationFrame(animate);
-  }, [spinning, names, onSpinStart, onSpinComplete, drawWheel]);
+  }, [spinning, names, forcedWinner, onSpinStart, onSpinComplete, drawWheel]);
 
   useEffect(() => {
     return () => {

@@ -1,5 +1,5 @@
-import { DEFAULT_WINNER_COUNT, STORAGE_KEY, WINNER_COUNT_STORAGE_KEY } from "@/types/raffle";
 import { clearActiveSession } from "@/lib/sessionHistory";
+import { DEFAULT_WINNER_COUNT, STORAGE_KEY, WINNER_COUNT_STORAGE_KEY } from "@/types/raffle";
 
 export function saveNames(names: string[]): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(names));

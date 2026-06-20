@@ -42,3 +42,10 @@ export function truncate(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
   return text.slice(0, maxLength - 1) + "…";
 }
+
+export function findNameIndex(names: string[], target: string): number {
+  const exact = names.indexOf(target);
+  if (exact >= 0) return exact;
+  const lower = target.toLowerCase();
+  return names.findIndex((n) => n.toLowerCase() === lower);
+}

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import NerakarToggle from "@/components/NerakarToggle";
 import Accordion from "@/components/marketing/Accordion";
 
 export const metadata: Metadata = {
@@ -27,6 +28,7 @@ export default function FAQPage() {
         <p className="section-subtitle mt-4">Everything you need to know about running fair raffles with SpinDraw</p>
       </div>
       <div className="mt-12"><Accordion items={faqItems} /></div>
+      <NerakarToggle />
     </div>
   );
 }
