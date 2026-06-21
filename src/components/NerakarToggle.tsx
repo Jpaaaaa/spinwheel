@@ -16,6 +16,7 @@ export default function NerakarToggle() {
   const [namesText, setNamesText] = useState("");
   const [loading, setLoading] = useState(true);
   const [syncError, setSyncError] = useState<string | null>(null);
+  const [localOnly, setLocalOnly] = useState(false);
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const admin = isAdmin(session?.user?.email);
@@ -27,6 +28,8 @@ export default function NerakarToggle() {
       clearNerakarIfUnauthorized(session?.user?.email);
       setEnabled(false);
       setNamesText("");
+      setSyncError(null);
+      setLocalOnly(false);
       setLoading(false);
       return;
     }
@@ -36,15 +39,21 @@ export default function NerakarToggle() {
     (async () => {
       setLoading(true);
       setSyncError(null);
-      const settings = await fetchNerakarSettings();
+      setLocalOnly(false);
+
+      const result = await fetchNerakarSettings();
       if (cancelled) return;
 
-      if (settings) {
-        setEnabled(settings.enabled);
-        setNamesText(settings.queue.join("\n"));
-      } else {
-        setSyncError("Could not load NERAKAR from your account.");
+      if (result.settings) {
+        setEnabled(result.settings.enabled);
+        setNamesText(result.settings.queue.join("\n"));
       }
+
+      if (!result.ok) {
+        setSyncError(result.error ?? "Could not load NERAKAR from your account.");
+        setLocalOnly(Boolean(result.localOnly));
+      }
+
       setLoading(false);
     })();
 
@@ -67,12 +76,19 @@ export default function NerakarToggle() {
     if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
 
     saveTimerRef.current = setTimeout(async () => {
-      const ok = await persistNerakarSettings({
+      const result = await persistNerakarSettings({
         enabled: nextEnabled,
         queue: parseNerakarNames(text),
       });
-      if (!ok) setSyncError("Could not save NERAKAR to your account.");
-      else setSyncError(null);
+
+      if (!result.ok) {
+        setSyncError(result.error ?? "Could not save NERAKAR to your account.");
+        setLocalOnly(Boolean(result.localOnly));
+        return;
+      }
+
+      setSyncError(null);
+      setLocalOnly(false);
     }, 400);
   };
 
@@ -111,14 +127,25 @@ export default function NerakarToggle() {
       {loading && (
         <p className="text-xs text-neutral-500">Loading your saved names…</p>
       )}
+
       {syncError && (
-        <p className="max-w-sm text-center text-xs text-red-600">{syncError}</p>
+        <div className="max-w-sm rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-center">
+          <p className="text-xs font-semibold text-red-800">Sync issue</p>
+          <p className="mt-1 text-xs leading-relaxed text-red-700">{syncError}</p>
+          {localOnly && (
+            <p className="mt-2 text-[11px] leading-relaxed text-red-600/90">
+              Changes are kept on this device only until cloud storage is connected.
+            </p>
+          )}
+        </div>
       )}
+
       {!loading && !syncError && queueFromText().length > 0 && (
         <p className="max-w-sm text-center text-xs text-neutral-500">
           Saved to your account — available on any device when you sign in.
         </p>
       )}
+
       <p className="max-w-sm text-center text-xs text-neutral-500">
         Uncheck NERAKAR to pause rigging without deleting names.
       </p>
