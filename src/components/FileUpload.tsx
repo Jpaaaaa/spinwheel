@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
+import { SpinLoadingIcon } from "@/components/SpinLoading";
 import { downloadParticipantsTemplate } from "@/lib/downloadTemplate";
 import { parseNamesFromExcel } from "@/lib/parseExcel";
 
@@ -67,9 +68,13 @@ export default function FileUpload({ onNamesLoaded }: FileUploadProps) {
           boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6), 0 4px 16px rgba(99,102,241,0.15)",
         }}
       >
-        <svg className="h-7 w-7 text-indigo-600 sm:h-8 sm:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-        </svg>
+        {loading ? (
+          <SpinLoadingIcon className="h-8 w-8 sm:h-9 sm:w-9" />
+        ) : (
+          <svg className="h-7 w-7 text-indigo-600 sm:h-8 sm:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+          </svg>
+        )}
       </div>
 
       <p className="text-base font-semibold text-slate-900 sm:text-lg">

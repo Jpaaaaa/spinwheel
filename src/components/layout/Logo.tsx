@@ -1,24 +1,42 @@
+import Image from "next/image";
 import Link from "next/link";
+import { BRAND_NAME, LOGO_PATH } from "@/lib/brand";
 
-export default function Logo({ className = "" }: { className?: string }) {
+type LogoProps = {
+  className?: string;
+  priority?: boolean;
+  showText?: boolean;
+  variant?: "default" | "light";
+};
+
+export default function Logo({
+  className = "",
+  priority = false,
+  showText = true,
+  variant = "default",
+}: LogoProps) {
+  const textClass = variant === "light" ? "text-white" : "text-neutral-900";
+  const accentClass = variant === "light" ? "text-indigo-200" : "text-indigo-600";
   return (
-    <Link href="/" className={`flex items-center gap-2.5 ${className}`}>
-      <div
-        className="flex h-9 w-9 items-center justify-center rounded-xl"
-        style={{
-          background: "linear-gradient(135deg, #6366f1 0%, #7c3aed 100%)",
-          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.25), 0 6px 20px rgba(99,102,241,0.45)",
-          border: "1px solid rgba(255,255,255,0.25)",
-        }}
-      >
-        <svg className="h-5 w-5 text-slate-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <circle cx="12" cy="12" r="9" />
-          <path d="M12 3v9l6 3" strokeLinecap="round" />
-        </svg>
-      </div>
-      <span className="font-display text-xl font-extrabold tracking-tight text-slate-900" style={{ letterSpacing: "-0.03em" }}>
-        Spin<span className="text-gradient">Draw</span>
-      </span>
+    <Link href="/" className={`inline-flex shrink-0 items-center gap-2.5 bg-transparent ${className}`}>
+      <Image
+        src={LOGO_PATH}
+        alt=""
+        width={40}
+        height={40}
+        priority={priority}
+        unoptimized
+        aria-hidden
+        className="h-9 w-9 bg-transparent object-contain sm:h-10 sm:w-10"
+      />
+      {showText && (
+        <span
+          className={`font-display text-lg font-bold tracking-tight sm:text-xl ${textClass}`}
+          style={{ letterSpacing: "-0.04em" }}
+        >
+          Draw<span className={accentClass}> Master</span>
+        </span>
+      )}
     </Link>
   );
 }

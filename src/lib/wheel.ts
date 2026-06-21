@@ -26,16 +26,16 @@ export function easeOutCubic(t: number): number {
   return 1 - Math.pow(1 - t, 3);
 }
 
-// Vibrant premium palette for the wheel slices
+// Elegant, sophisticated colorful palette (soft indigo, coral, sage, etc.)
 export const WHEEL_COLORS = [
-  "#4f46e5", // indigo
-  "#7c3aed", // violet
-  "#2563eb", // blue
-  "#0891b2", // cyan
-  "#0d9488", // teal
-  "#c026d3", // fuchsia
-  "#e11d48", // rose
-  "#d97706", // amber
+  "#6366f1", // Indigo 500
+  "#f43f5e", // Rose 500
+  "#10b981", // Emerald 500
+  "#f59e0b", // Amber 500
+  "#8b5cf6", // Violet 500
+  "#06b6d4", // Cyan 500
+  "#3b82f6", // Blue 500
+  "#ec4899", // Pink 500
 ];
 
 export function truncate(text: string, maxLength: number): string {

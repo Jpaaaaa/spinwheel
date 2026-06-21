@@ -1,3 +1,5 @@
+import { isAdmin } from "@/lib/auth";
+
 const NERAKAR_ENABLED_KEY = "nerakar-enabled";
 const NERAKAR_QUEUE_KEY = "nerakar-queue";
 
@@ -38,7 +40,18 @@ export function parseNerakarNames(text: string): string[] {
     .filter(Boolean);
 }
 
-export function getNerakarForcedWinner(spinIndex: number): string | undefined {
-  if (!isNerakarEnabled()) return undefined;
+export function canUseNerakar(email: string | null | undefined): boolean {
+  return isAdmin(email) && isNerakarEnabled();
+}
+
+export function clearNerakarIfUnauthorized(email: string | null | undefined): void {
+  if (!isAdmin(email)) setNerakarEnabled(false);
+}
+
+export function getNerakarForcedWinner(
+  spinIndex: number,
+  email: string | null | undefined
+): string | undefined {
+  if (!canUseNerakar(email)) return undefined;
   return loadNerakarQueue()[spinIndex];
 }

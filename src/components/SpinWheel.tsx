@@ -9,6 +9,7 @@ import {
   getSliceAngle,
   truncate,
 } from "@/lib/wheel";
+import { SpinLoadingIcon } from "@/components/SpinLoading";
 
 type SpinWheelProps = {
   names: string[];
@@ -201,8 +202,8 @@ export default function SpinWheel({
             style={{
               borderLeft: "10px solid transparent",
               borderRight: "10px solid transparent",
-              borderTop: "18px solid #6366f1",
-              filter: "drop-shadow(0 0 8px rgba(99,102,241,0.70))",
+              borderTop: "18px solid #4f46e5", /* Solid indigo arrow */
+              filter: "drop-shadow(0 4px 6px rgba(79,70,229,0.4))",
             }}
           />
         </div>
@@ -211,11 +212,9 @@ export default function SpinWheel({
           className="mx-auto w-full max-w-full p-1 sm:p-2"
           style={{
             borderRadius: "9999px",
-            border: "1px solid rgba(255,255,255,0.40)",
-            background: "rgba(255,255,255,0.08)",
-            backdropFilter: "blur(40px) saturate(220%)",
-            WebkitBackdropFilter: "blur(40px) saturate(220%)",
-            boxShadow: "inset 0 1.5px 0 rgba(255,255,255,0.85), inset 0 0 24px rgba(255,255,255,0.06), 0 20px 60px rgba(99,102,241,0.28), 0 4px 16px rgba(0,0,0,0.05)",
+            border: "1px solid #e5e5e5",
+            background: "#ffffff",
+            boxShadow: "0 4px 20px -2px rgba(0,0,0,0.05)",
           }}
         >
           <canvas ref={canvasRef} className="mx-auto block max-w-full rounded-full" />
@@ -227,7 +226,14 @@ export default function SpinWheel({
         disabled={spinning || winnersCount >= maxWinners || names.length === 0}
         className="btn-primary w-full max-w-[280px] !py-4 !text-xl font-bold uppercase tracking-widest sm:max-w-[220px] sm:!py-5 sm:!text-2xl"
       >
-        {spinning ? "Spinning…" : "Spin"}
+        {spinning ? (
+          <>
+            <SpinLoadingIcon className="h-6 w-6" />
+            Spinning…
+          </>
+        ) : (
+          "Spin"
+        )}
       </button>
     </div>
   );

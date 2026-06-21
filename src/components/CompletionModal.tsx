@@ -27,7 +27,7 @@ export default function CompletionModal({
     >
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-indigo-950/40 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/30 backdrop-blur-sm"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -36,11 +36,7 @@ export default function CompletionModal({
       <div className="glass-strong relative w-full max-w-md p-6 sm:p-8">
         <div className="text-center">
           <div
-            className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl text-white"
-            style={{
-              background: "linear-gradient(135deg,#6366f1,#7c3aed)",
-              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.25), 0 8px 24px rgba(99,102,241,0.40)",
-            }}
+            className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-neutral-900 text-white shadow-md"
           >
             <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
@@ -49,17 +45,17 @@ export default function CompletionModal({
 
           <h2
             id="completion-modal-title"
-            className="font-display text-2xl font-extrabold tracking-tight text-slate-900"
+            className="font-display text-2xl font-extrabold tracking-tight text-neutral-900"
           >
             All winners drawn!
           </h2>
-          <p className="mt-2 text-sm text-slate-600 sm:text-base">
+          <p className="mt-2 text-sm text-neutral-500 sm:text-base">
             {winners.length} winner{winners.length !== 1 ? "s" : ""} selected from{" "}
             {totalParticipants} participant{totalParticipants !== 1 ? "s" : ""}.
           </p>
         </div>
 
-        <p className="mt-6 text-center text-sm font-medium text-slate-700">
+        <p className="mt-6 text-center text-sm font-medium text-neutral-700">
           Saved to your draw history. Download results as PDF?
         </p>
 

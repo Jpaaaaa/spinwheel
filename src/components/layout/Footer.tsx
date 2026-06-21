@@ -26,15 +26,7 @@ const socials = [
 
 export default function Footer() {
   return (
-    <footer
-      style={{
-        borderTop: "1px solid rgba(255,255,255,0.28)",
-        background: "rgba(255,255,255,0.07)",
-        backdropFilter: "blur(64px) saturate(220%)",
-        WebkitBackdropFilter: "blur(64px) saturate(220%)",
-        boxShadow: "inset 0 1.5px 0 rgba(255,255,255,0.75), inset 0 0 20px rgba(255,255,255,0.05)",
-      }}
-    >
+    <footer className="border-t border-neutral-100 bg-white">
       <div className="safe-px safe-pb mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
@@ -74,11 +66,8 @@ export default function Footer() {
           ))}
         </div>
 
-        <div
-          className="mt-12 flex flex-col items-center justify-between gap-4 pt-8 sm:flex-row"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.28)" }}
-        >
-          <p className="text-sm text-slate-500">© 2019 SpinDraw GmbH. All rights reserved.</p>
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-neutral-100 pt-8 sm:flex-row">
+          <p className="text-sm text-slate-500">© 2019 Draw Master GmbH. All rights reserved.</p>
           <p className="text-sm text-slate-500">Berlin, Germany · Made in the EU</p>
         </div>
       </div>
