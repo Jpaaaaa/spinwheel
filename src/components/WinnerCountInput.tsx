@@ -6,15 +6,26 @@ type WinnerCountInputProps = {
   value: number;
   onChange: (count: number) => void;
   maxParticipants: number;
+  maxWinners?: number;
 };
 
-export default function WinnerCountInput({ value, onChange, maxParticipants }: WinnerCountInputProps) {
-  const max = maxParticipants > 0 ? maxParticipants : 999;
+export default function WinnerCountInput({
+  value,
+  onChange,
+  maxParticipants,
+  maxWinners,
+}: WinnerCountInputProps) {
+  const participantCap = maxParticipants > 0 ? maxParticipants : 999;
+  const max = maxWinners !== undefined
+    ? Math.min(participantCap, maxWinners)
+    : participantCap;
 
   const handleChange = (raw: string) => {
     const parsed = parseInt(raw, 10);
     if (Number.isNaN(parsed)) return;
-    onChange(clampWinnerCount(parsed, maxParticipants));
+    let next = clampWinnerCount(parsed, maxParticipants);
+    if (maxWinners !== undefined) next = Math.min(next, maxWinners);
+    onChange(next);
   };
 
   return (
@@ -36,7 +47,9 @@ export default function WinnerCountInput({ value, onChange, maxParticipants }: W
         />
         <p className="text-xs text-slate-600 sm:text-sm text-slate-600">
           {maxParticipants > 0
-            ? `Max ${maxParticipants} (one per participant)`
+            ? maxWinners !== undefined
+              ? `Max ${max} (${maxWinners} winners on free plan)`
+              : `Max ${maxParticipants} (one per participant)`
             : "Set after loading participants"}
         </p>
       </div>

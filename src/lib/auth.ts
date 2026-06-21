@@ -8,6 +8,10 @@ export function isAdmin(email: string | null | undefined): boolean {
   return ADMIN_EMAILS.includes(email.toLowerCase());
 }
 
+export function getAccountTier(email: string | null | undefined): "Premium" | "Free user" {
+  return isAdmin(email) ? "Premium" : "Free user";
+}
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
@@ -17,6 +21,20 @@ export const authOptions: NextAuthOptions = {
   ],
   pages: {
     signIn: "/login",
+  },
+  callbacks: {
+    async jwt({ token, account, profile }) {
+      if (account?.provider === "google" && profile && "picture" in profile) {
+        token.picture = profile.picture;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user && token.picture) {
+        session.user.image = token.picture as string;
+      }
+      return session;
+    },
   },
   secret: process.env.NEXTAUTH_SECRET,
 };

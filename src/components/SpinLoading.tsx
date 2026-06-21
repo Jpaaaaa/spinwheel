@@ -29,7 +29,7 @@ export function SpinLoadingIcon({ className = "h-10 w-10" }: { className?: strin
         d="M32 32 L12.2 17.2 A28 28 0 0 1 32 4 Z"
         fill="#a5b4fc"
       />
-      <circle cx="32" cy="32" r="8" fill="white" stroke="#c7d2fe" strokeWidth="2" />
+      <circle cx="32" cy="32" r="8" fill="#0f172a" stroke="#6366f1" strokeWidth="2" />
       <circle cx="32" cy="32" r="3" fill="#6366f1" />
     </svg>
   );

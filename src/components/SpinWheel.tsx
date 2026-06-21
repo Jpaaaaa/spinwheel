@@ -212,9 +212,9 @@ export default function SpinWheel({
           className="mx-auto w-full max-w-full p-1 sm:p-2"
           style={{
             borderRadius: "9999px",
-            border: "1px solid #e5e5e5",
-            background: "#ffffff",
-            boxShadow: "0 4px 20px -2px rgba(0,0,0,0.05)",
+            border: "2px solid #c7d2fe",
+            background: "transparent",
+            boxShadow: "0 8px 32px -8px rgba(79, 70, 229, 0.2)",
           }}
         >
           <canvas ref={canvasRef} className="mx-auto block max-w-full rounded-full" />

@@ -5,8 +5,10 @@ import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { getAccountTier } from "@/lib/auth";
 import { setNerakarEnabled } from "@/lib/nerakar";
 import Logo from "./Logo";
+import UserAvatar from "./UserAvatar";
 
 const navLinks = [
   { href: "/about",   label: "About"   },
@@ -20,19 +22,26 @@ function AuthButtons({ onNavigate }: { onNavigate?: () => void }) {
   const { data: session } = useSession();
 
   if (session?.user) {
+    const tier = getAccountTier(session.user.email);
     return (
       <>
         <motion.div
           whileHover={{ scale: 1.02 }}
-          className="flex items-center gap-2 rounded-full border border-white/30 bg-white/15 px-3 py-1.5 backdrop-blur-sm"
+          className="flex items-center gap-2 rounded-full border border-indigo-200/60 bg-white/60 px-3 py-1.5"
         >
-          {session.user.image && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={session.user.image} alt="" className="h-7 w-7 rounded-full ring-2 ring-white/40" />
-          )}
-          <span className="max-w-[120px] truncate text-sm font-medium text-white">
-            {session.user.name}
-          </span>
+          <UserAvatar name={session.user.name} image={session.user.image} />
+          <div className="min-w-0">
+            <span className="block max-w-[120px] truncate text-sm font-medium leading-tight text-neutral-800">
+              {session.user.name}
+            </span>
+            <span
+              className={`block text-[10px] font-semibold leading-tight ${
+                tier === "Premium" ? "text-indigo-600" : "text-neutral-500"
+              }`}
+            >
+              {tier}
+            </span>
+          </div>
         </motion.div>
         <button
           type="button"
@@ -41,7 +50,7 @@ function AuthButtons({ onNavigate }: { onNavigate?: () => void }) {
             setNerakarEnabled(false);
             signOut({ callbackUrl: "/" });
           }}
-          className="rounded-full bg-transparent px-4 py-1.5 text-sm font-medium text-white/85 transition-colors hover:bg-white/15 hover:text-white"
+          className="rounded-full bg-transparent px-4 py-1.5 text-sm font-medium text-indigo-800/75 transition-colors hover:bg-white/50 hover:text-indigo-950"
         >
           Sign out
         </button>
@@ -50,7 +59,7 @@ function AuthButtons({ onNavigate }: { onNavigate?: () => void }) {
           onClick={onNavigate}
           className="rounded-full bg-white px-5 py-1.5 text-sm font-semibold text-indigo-700 shadow-sm transition-all hover:bg-indigo-50 hover:shadow-md"
         >
-          Start Free
+          Start Draw
         </Link>
       </>
     );
@@ -61,7 +70,7 @@ function AuthButtons({ onNavigate }: { onNavigate?: () => void }) {
       <Link
         href="/login"
         onClick={onNavigate}
-        className="rounded-full bg-transparent px-4 py-1.5 text-sm font-medium text-white/85 transition-colors hover:bg-white/15 hover:text-white"
+        className="rounded-full bg-transparent px-4 py-1.5 text-sm font-medium text-indigo-800/75 transition-colors hover:bg-white/50 hover:text-indigo-950"
       >
         Sign in
       </Link>
@@ -88,14 +97,14 @@ export default function Navbar() {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className={`pointer-events-auto flex w-full max-w-5xl flex-col rounded-3xl border border-indigo-400/25 bg-gradient-to-r from-indigo-700 to-violet-700 p-2 shadow-[0_8px_28px_rgba(67,56,202,0.28)] backdrop-blur-xl transition-shadow duration-300 ${
-          open ? "shadow-[0_16px_40px_-12px_rgba(67,56,202,0.35)]" : ""
+        className={`pointer-events-auto flex w-full max-w-5xl flex-col overflow-hidden rounded-3xl border border-indigo-200/45 bg-gradient-to-r from-white from-[25%] via-indigo-50 via-[48%] via-violet-200 via-[75%] to-indigo-300 p-2 shadow-[0_8px_28px_rgba(99,102,241,0.12)] backdrop-blur-xl transition-shadow duration-300 ${
+          open ? "shadow-[0_16px_40px_-12px_rgba(99,102,241,0.16)]" : ""
         }`}
       >
         <nav className="flex items-center justify-between px-2 sm:px-4">
-          <Logo variant="light" className="relative z-10 origin-left scale-90 sm:scale-100" priority />
+          <Logo className="relative z-10 origin-left scale-90 sm:scale-100" priority />
 
-          <div className="hidden items-center gap-1 rounded-full border border-white/20 bg-white/10 p-1 backdrop-blur-sm md:flex">
+          <div className="hidden items-center gap-1 rounded-full border border-indigo-200/50 bg-white/45 p-1 backdrop-blur-sm md:flex">
             {navLinks.map((link, index) => {
               const isActive = pathname === link.href;
               return (
@@ -109,18 +118,18 @@ export default function Navbar() {
                   {isActive && (
                     <motion.div
                       layoutId="active-nav-pill"
-                      className="absolute inset-0 rounded-full border border-white/30 bg-white/20 shadow-sm"
+                      className="absolute inset-0 rounded-full border border-indigo-200/60 bg-white/80 shadow-sm"
                       transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     />
                   )}
                   {hoveredIndex === index && !isActive && (
                     <motion.div
                       layoutId="hover-nav-pill"
-                      className="absolute inset-0 rounded-full bg-white/12"
+                      className="absolute inset-0 rounded-full bg-indigo-100/50"
                       transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     />
                   )}
-                  <span className={`relative z-10 ${isActive ? "font-semibold text-white" : "text-white/80 hover:text-white"}`}>
+                  <span className={`relative z-10 ${isActive ? "font-semibold text-indigo-800" : "text-indigo-700/70 hover:text-indigo-900"}`}>
                     {link.label}
                   </span>
                 </Link>
@@ -136,7 +145,7 @@ export default function Navbar() {
             whileTap={{ scale: 0.95 }}
             type="button"
             onClick={() => setOpen(!open)}
-            className="relative z-10 rounded-full p-2 text-white/90 transition-colors hover:bg-white/15 md:hidden"
+            className="relative z-10 rounded-full p-2 text-indigo-700/75 transition-colors hover:bg-white/50 md:hidden"
             aria-label="Toggle menu"
           >
             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -157,7 +166,7 @@ export default function Navbar() {
               transition={{ type: "spring", stiffness: 200, damping: 25 }}
               className="overflow-hidden md:hidden"
             >
-              <div className="flex flex-col gap-1 rounded-2xl border border-white/15 bg-white/5 p-2 pt-4 backdrop-blur-sm">
+              <div className="flex flex-col gap-1 rounded-2xl border border-indigo-200/40 bg-gradient-to-br from-white/70 via-indigo-50/80 to-violet-100/70 p-2 pt-4">
                 {navLinks.map((link, i) => (
                   <motion.div
                     key={link.href}
@@ -170,8 +179,8 @@ export default function Navbar() {
                       onClick={closeMenu}
                       className={`block rounded-2xl px-4 py-3 text-sm font-medium transition-all ${
                         pathname === link.href
-                          ? "border border-white/30 bg-white/20 font-semibold text-white shadow-sm"
-                          : "text-white/80 hover:bg-white/10 hover:text-white"
+                          ? "border border-indigo-200/60 bg-white/80 font-semibold text-indigo-800 shadow-sm"
+                          : "text-indigo-700/70 hover:bg-indigo-100/40 hover:text-indigo-900"
                       }`}
                     >
                       {link.label}
@@ -182,7 +191,7 @@ export default function Navbar() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2 }}
-                  className="mt-2 flex flex-col gap-2 border-t border-white/25 pt-2"
+                  className="mt-2 flex flex-col gap-2 border-t border-indigo-200/40 pt-2"
                 >
                   <AuthButtons onNavigate={closeMenu} />
                 </motion.div>

@@ -3,16 +3,27 @@
 import { useState } from "react";
 import { parseManualNames } from "@/lib/parseNames";
 
-type ManualNameEntryProps = { onNamesLoaded: (names: string[]) => void; };
+type ManualNameEntryProps = {
+  onNamesLoaded: (names: string[]) => void;
+  maxParticipants?: number;
+};
 
-export default function ManualNameEntry({ onNamesLoaded }: ManualNameEntryProps) {
+export default function ManualNameEntry({ onNamesLoaded, maxParticipants }: ManualNameEntryProps) {
   const [text, setText]   = useState("");
   const [error, setError] = useState<string | null>(null);
 
   const handleLoad = () => {
-    const names = parseManualNames(text);
-    if (names.length === 0) { setError("Enter at least one name (one per line)."); return; }
-    setError(null);
+    let names = parseManualNames(text);
+    if (names.length === 0) {
+      setError("Enter at least one name (one per line).");
+      return;
+    }
+    if (maxParticipants !== undefined && names.length > maxParticipants) {
+      names = names.slice(0, maxParticipants);
+      setError(`Free plan allows up to ${maxParticipants} participants. Extra names were removed.`);
+    } else {
+      setError(null);
+    }
     onNamesLoaded(names);
   };
 
@@ -21,7 +32,10 @@ export default function ManualNameEntry({ onNamesLoaded }: ManualNameEntryProps)
       <label htmlFor="manual-names" className="block text-base font-semibold text-slate-900 sm:text-lg">
         Add participants manually
       </label>
-      <p className="mt-1 text-xs text-slate-600 sm:text-sm">One name per line</p>
+      <p className="mt-1 text-xs text-slate-600 sm:text-sm">
+        One name per line
+        {maxParticipants !== undefined && ` · max ${maxParticipants} on free plan`}
+      </p>
 
       <textarea
         id="manual-names"

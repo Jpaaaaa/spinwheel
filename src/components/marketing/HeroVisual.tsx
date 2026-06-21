@@ -113,7 +113,7 @@ export default function HeroVisual() {
               {[...Array(12)].map((_, i) => (
                 <div
                   key={i}
-                  className="absolute h-2 w-2 rounded-full bg-white/80 shadow-sm"
+                  className="absolute h-2 w-2 rounded-full bg-indigo-200/90 shadow-sm"
                   style={{
                     top: "50%",
                     left: "50%",
@@ -126,7 +126,7 @@ export default function HeroVisual() {
 
           {/* Fixed center hub */}
           <div
-            className="pointer-events-none absolute left-1/2 top-1/2 z-10 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-transparent sm:h-20 sm:w-20"
+            className="pointer-events-none absolute left-1/2 top-1/2 z-10 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-md ring-4 ring-white/80 sm:h-[4.5rem] sm:w-[4.5rem] sm:ring-[5px]"
           >
             <Image
               src={LOGO_PATH}
@@ -134,7 +134,7 @@ export default function HeroVisual() {
               width={48}
               height={48}
               unoptimized
-              className="h-10 w-auto bg-transparent sm:h-12"
+              className="h-8 w-auto bg-transparent sm:h-10"
             />
           </div>
         </div>
