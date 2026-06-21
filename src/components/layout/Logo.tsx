@@ -21,12 +21,12 @@ export default function Logo({
     <Link href="/" className={`inline-flex shrink-0 items-center gap-2.5 bg-transparent ${className}`}>
       <Image
         src={LOGO_PATH}
-        alt=""
+        alt={showText ? "" : BRAND_NAME}
         width={40}
         height={40}
         priority={priority}
         unoptimized
-        aria-hidden
+        aria-hidden={showText}
         className="h-9 w-9 bg-transparent object-contain sm:h-10 sm:w-10"
       />
       {showText && (
