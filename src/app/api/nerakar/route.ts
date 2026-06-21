@@ -11,8 +11,16 @@ export async function GET() {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const settings = await getNerakarForUser(email!);
-  return NextResponse.json(settings);
+  try {
+    const settings = await getNerakarForUser(email!);
+    return NextResponse.json(settings);
+  } catch (error) {
+    console.error("[nerakar GET]", error);
+    return NextResponse.json(
+      { error: "NERAKAR storage is unavailable. Configure Upstash Redis on Vercel." },
+      { status: 503 }
+    );
+  }
 }
 
 export async function PUT(request: Request) {
@@ -40,6 +48,14 @@ export async function PUT(request: Request) {
     return NextResponse.json({ error: "Invalid settings" }, { status: 400 });
   }
 
-  const settings = await saveNerakarForUser(email!, { enabled, queue });
-  return NextResponse.json(settings);
+  try {
+    const settings = await saveNerakarForUser(email!, { enabled, queue });
+    return NextResponse.json(settings);
+  } catch (error) {
+    console.error("[nerakar PUT]", error);
+    return NextResponse.json(
+      { error: "NERAKAR storage is unavailable. Configure Upstash Redis on Vercel." },
+      { status: 503 }
+    );
+  }
 }
