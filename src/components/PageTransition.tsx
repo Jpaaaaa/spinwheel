@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import SpinLoading from "@/components/SpinLoading";
 
-const TRANSITION_MS = 2000;
+const TRANSITION_MS = 1000;
 
 function isInternalNavigation(href: string, pathname: string): boolean {
   if (!href || href.startsWith("#") || href.startsWith("mailto:") || href.startsWith("tel:")) {

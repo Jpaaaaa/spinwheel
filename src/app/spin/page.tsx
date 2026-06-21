@@ -10,7 +10,8 @@ import SpinWheel from "@/components/SpinWheel";
 import WinnersPanel from "@/components/WinnersPanel";
 import WinnerCelebration from "@/components/WinnerCelebration";
 import { downloadWinnersPdf } from "@/lib/downloadWinnersPdf";
-import { clearNerakarIfUnauthorized, getNerakarForcedWinner } from "@/lib/nerakar";
+import { clearNerakarIfUnauthorized, fetchNerakarSettings, getNerakarForcedWinner } from "@/lib/nerakar";
+import { isAdmin } from "@/lib/auth";
 import {
   restoreActiveSessionForParticipants,
   saveActiveSession,
@@ -38,6 +39,9 @@ export default function SpinPage() {
 
   useEffect(() => {
     clearNerakarIfUnauthorized(session?.user?.email);
+    if (isAdmin(session?.user?.email)) {
+      void fetchNerakarSettings();
+    }
   }, [session?.user?.email]);
 
   useEffect(() => {
