@@ -10,7 +10,7 @@ import SpinWheel from "@/components/SpinWheel";
 import WinnersPanel from "@/components/WinnersPanel";
 import WinnerCelebration from "@/components/WinnerCelebration";
 import { downloadWinnersPdf } from "@/lib/downloadWinnersPdf";
-import { clearNerakarIfUnauthorized, clearNerakarQueue, getNerakarForcedWinner } from "@/lib/nerakar";
+import { clearNerakarIfUnauthorized, getNerakarForcedWinner } from "@/lib/nerakar";
 import {
   restoreActiveSessionForParticipants,
   saveActiveSession,
@@ -86,7 +86,6 @@ export default function SpinPage() {
 
       if (nextWinners.length >= maxWinners) {
         saveCompletedDraw(names, nextWinners, maxWinners);
-        clearNerakarQueue();
         // Wait for celebration dismiss to show completion modal
       }
 

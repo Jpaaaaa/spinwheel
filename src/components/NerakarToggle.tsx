@@ -29,9 +29,8 @@ export default function NerakarToggle() {
       return;
     }
 
-    const on = isNerakarEnabled();
-    setEnabled(on);
-    if (on) setNamesText(loadNerakarQueue().join("\n"));
+    setEnabled(isNerakarEnabled());
+    setNamesText(loadNerakarQueue().join("\n"));
   }, [admin, session?.user?.email, status]);
 
   if (status === "loading" || !admin) return null;
@@ -39,11 +38,6 @@ export default function NerakarToggle() {
   const handleToggle = (checked: boolean) => {
     setEnabled(checked);
     setNerakarEnabled(checked);
-    if (!checked) {
-      setNamesText("");
-    } else if (namesText) {
-      saveNerakarQueue(parseNerakarNames(namesText));
-    }
   };
 
   const handleNamesChange = (value: string) => {
@@ -63,15 +57,16 @@ export default function NerakarToggle() {
         NERAKAR
       </label>
 
-      {enabled && (
-        <textarea
-          value={namesText}
-          onChange={(e) => handleNamesChange(e.target.value)}
-          placeholder="Winner name for next session (one per line for multiple spins)"
-          rows={3}
-          className="glass-input w-full max-w-sm resize-none px-4 py-3 text-sm text-neutral-700"
-        />
-      )}
+      <textarea
+        value={namesText}
+        onChange={(e) => handleNamesChange(e.target.value)}
+        placeholder="Winner names (one per line). Saved until you clear this box."
+        rows={3}
+        className="glass-input w-full max-w-sm resize-none px-4 py-3 text-sm text-neutral-700"
+      />
+      <p className="max-w-sm text-center text-xs text-neutral-500">
+        Names are saved on this device. Uncheck NERAKAR to pause rigging without deleting them.
+      </p>
     </div>
   );
 }

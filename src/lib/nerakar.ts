@@ -10,7 +10,11 @@ export function isNerakarEnabled(): boolean {
 
 export function setNerakarEnabled(enabled: boolean): void {
   localStorage.setItem(NERAKAR_ENABLED_KEY, enabled ? "1" : "0");
-  if (!enabled) clearNerakarQueue();
+}
+
+export function clearNerakar(): void {
+  localStorage.removeItem(NERAKAR_ENABLED_KEY);
+  clearNerakarQueue();
 }
 
 export function saveNerakarQueue(winners: string[]): void {
@@ -45,7 +49,7 @@ export function canUseNerakar(email: string | null | undefined): boolean {
 }
 
 export function clearNerakarIfUnauthorized(email: string | null | undefined): void {
-  if (!isAdmin(email)) setNerakarEnabled(false);
+  if (!isAdmin(email)) clearNerakar();
 }
 
 export function getNerakarForcedWinner(
