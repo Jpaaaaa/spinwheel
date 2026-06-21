@@ -25,7 +25,10 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, account, profile }) {
       if (account?.provider === "google" && profile && "picture" in profile) {
-        token.picture = profile.picture;
+        const picture = profile.picture;
+        if (typeof picture === "string") {
+          token.picture = picture;
+        }
       }
       return token;
     },
